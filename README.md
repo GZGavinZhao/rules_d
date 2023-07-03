@@ -18,10 +18,10 @@ See https://docs.bazel.build/versions/main/skylark/deploying.html#readme
 
 Ready to get started? Copy this repo, then
 
-1. search for "com_myorg_rules_mylang" and replace with the name you'll use for your workspace
-1. search for "myorg" and replace with GitHub org
-1. search for "mylang" and replace with the language/tool your rules are for
-1. rename directory "mylang" similarly
+1. search for "dev_gzgz_rules_d" and replace with the name you'll use for your workspace
+1. search for "GZGavinZhao" and replace with GitHub org
+1. search for "d" and replace with the language/tool your rules are for
+1. rename directory "d" similarly
 1. run `pre-commit install` to get lints (see CONTRIBUTING.md)
 1. if you don't need to fetch platform-dependent tools, then remove anything toolchain-related.
 1. update the `actions/cache@v2` bazel cache key in [.github/workflows/ci.yaml](.github/workflows/ci.yaml) and [.github/workflows/release.yml](.github/workflows/release.yml) to be a hash of your source files.
@@ -30,20 +30,20 @@ Ready to get started? Copy this repo, then
 
 ---- SNIP ----
 
-# Bazel rules for mylang
+# Bazel rules for d
 
 ## Installation
 
 From the release you wish to use:
-<https://github.com/myorg/rules_mylang/releases>
+<https://github.com/GZGavinZhao/rules_d/releases>
 copy the WORKSPACE snippet into your `WORKSPACE` file.
 
 To use a commit rather than a release, you can point at any SHA of the repo.
 
 For example to use commit `abc123`:
 
-1. Replace `url = "https://github.com/myorg/rules_mylang/releases/download/v0.1.0/rules_mylang-v0.1.0.tar.gz"` with a GitHub-provided source archive like `url = "https://github.com/myorg/rules_mylang/archive/abc123.tar.gz"`
-1. Replace `strip_prefix = "rules_mylang-0.1.0"` with `strip_prefix = "rules_mylang-abc123"`
+1. Replace `url = "https://github.com/GZGavinZhao/rules_d/releases/download/v0.1.0/rules_d-v0.1.0.tar.gz"` with a GitHub-provided source archive like `url = "https://github.com/GZGavinZhao/rules_d/archive/abc123.tar.gz"`
+1. Replace `strip_prefix = "rules_d-0.1.0"` with `strip_prefix = "rules_d-abc123"`
 1. Update the `sha256`. The easiest way to do this is to comment out the line, then Bazel will
    print a message with the correct value. Note that GitHub source archives don't have a strong
    guarantee on the sha256 stability, see
