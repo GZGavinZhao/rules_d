@@ -18,7 +18,7 @@ See https://docs.bazel.build/versions/main/skylark/deploying.html#readme
 
 Ready to get started? Copy this repo, then
 
-1. search for "dev_gzgz_rules_d" and replace with the name you'll use for your workspace
+1. search for "gzgz_rules_d" and replace with the name you'll use for your workspace
 1. search for "GZGavinZhao" and replace with GitHub org
 1. search for "d" and replace with the language/tool your rules are for
 1. rename directory "d" similarly

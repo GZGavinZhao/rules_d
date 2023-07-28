@@ -18,7 +18,7 @@ cat << EOF
 2. Add to your \`MODULE.bazel\` file:
 
 \`\`\`starlark
-bazel_dep(name = "dev_gzgz_rules_d", version = "${TAG:1}")
+bazel_dep(name = "gzgz_rules_d", version = "${TAG:1}")
 \`\`\`
 
 ## Using WORKSPACE
@@ -28,7 +28,7 @@ Paste this snippet into your `WORKSPACE.bazel` file:
 \`\`\`starlark
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
-    name = "dev_gzgz_rules_d",
+    name = "gzgz_rules_d",
     sha256 = "${SHA}",
     strip_prefix = "${PREFIX}",
     url = "https://github.com/GZGavinZhao/rules_d/releases/download/${TAG}/${ARCHIVE}",

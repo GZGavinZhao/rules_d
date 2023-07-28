@@ -1,0 +1,17 @@
+package(default_visibility = ["//visibility:public"])
+
+constraint_setting(
+    name = "compiler",
+    default_constraint_value = ":dmd",
+)
+
+constraint_value(
+    name = "dmd",
+    constraint_setting = ":compiler",
+)
+
+constraint_value(
+    name = "ldc",
+    constraint_setting = ":compiler",
+)
+

@@ -1,6 +1,6 @@
 # Override http_archive for local testing
 local_repository(
-    name = "dev_gzgz_rules_d",
+    name = "gzgz_rules_d",
     path = "../..",
 )
 
@@ -14,6 +14,6 @@ local_repository(
 # you should fetch it *before* calling this.
 # Alternatively, you can skip calling this function, so long as you've
 # already fetched all the dependencies.
-load("@dev_gzgz_rules_d//d:repositories.bzl", "rules_d_dependencies")
+load("@gzgz_rules_d//d:repositories.bzl", "rules_d_dependencies")
 
 rules_d_dependencies()

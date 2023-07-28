@@ -10,17 +10,31 @@ names (the latest version will be picked for each name) and can register them as
 effectively overriding the default named toolchain due to toolchain resolution precedence.
 """
 
+load("//d/private:toolchains_repo.bzl", "COMPILERS")
 load(":repositories.bzl", "d_register_toolchains")
 
 _DEFAULT_NAME = "d"
 
-d_toolchain = tag_class(attrs = {
-    "name": attr.string(doc = """\
+d_toolchain = tag_class(
+    attrs = {
+        "name": attr.string(
+            doc = """\
 Base name for generated repositories, allowing more than one d toolchain to be registered.
 Overriding the default is only permitted in the root module.
-""", default = _DEFAULT_NAME),
-    "d_version": attr.string(doc = "Explicit version of d.", mandatory = True),
-})
+""",
+            default = _DEFAULT_NAME,
+        ),
+        "version": attr.string(
+            doc = "Explicit version of the compiler.",
+            mandatory = True,
+        ),
+        "compiler": attr.string(
+            doc = "Type of compiler",
+            default = COMPILERS[0],
+            values = COMPILERS,
+        ),
+    },
+)
 
 def _toolchain_extension(module_ctx):
     registrations = {}
@@ -31,24 +45,32 @@ def _toolchain_extension(module_ctx):
                 Only the root module may override the default name for the d toolchain.
                 This prevents conflicting registrations in the global namespace of external repos.
                 """)
-            if toolchain.name not in registrations.keys():
-                registrations[toolchain.name] = []
-            registrations[toolchain.name].append(toolchain.d_version)
-    for name, versions in registrations.items():
-        if len(versions) > 1:
-            # TODO: should be semver-aware, using MVS
-            selected = sorted(versions, reverse = True)[0]
 
-            # buildifier: disable=print
-            print("NOTE: d toolchain {} has multiple versions {}, selected {}".format(name, versions, selected))
-        else:
-            selected = versions[0]
+            name = toolchain.name
+            compiler = toolchain.compiler
 
-        d_register_toolchains(
-            name = name,
-            d_version = selected,
-            register = False,
-        )
+            if compiler not in registrations.keys():
+                registrations[compiler] = {}
+            if name not in registrations[compiler].keys():
+                registrations[compiler][name] = []
+            registrations[compiler][name].append(toolchain.version)
+
+    for compiler, regs in registrations.items():
+        for name, versions in regs.itmes():
+            if len(versions) > 1:
+                selected = sorted(versions, reverse = True)[0]
+
+                # buildifier: disable=print
+                print("NOTE: d toolchain {} has multiple versions {}, selected {}".format(name, versions, selected))
+            else:
+                selected = versions[0]
+
+            d_register_toolchains(
+                name = name,
+                version = selected,
+                compiler = compiler,
+                register = False,
+            )
 
 d = module_extension(
     implementation = _toolchain_extension,
