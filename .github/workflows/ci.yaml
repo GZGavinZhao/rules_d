@@ -57,3 +57,4 @@ jobs:
         run: |
           pushd e2e/smoke
           dmd -v app/main.d
+          bazel build --enable_bzlmod -s //app:app || cat bazel-out/darwin-fastbuild/bin/app/app-2.params
