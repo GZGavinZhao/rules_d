@@ -88,6 +88,7 @@ def d_register_toolchains(name, compiler, version, register = True, **kwargs):
         register: whether to call through to native.register_toolchains.
             Should be True for WORKSPACE users, but false when used under bzlmod extension
         compiler: the type of compiler to register (dmd or ldc)
+        version: the version of the compiler to register
         **kwargs: passed to each d_repositories call
     """
     for platform in PLATFORMS.keys():
@@ -102,11 +103,12 @@ def d_register_toolchains(name, compiler, version, register = True, **kwargs):
             **kwargs
         )
 
-        if register:
-            native.register_toolchains("@%s_%s_toolchains//:%s_toolchain" % (name, compiler, platform))
-
+    toolchains_repo_name = "%s_%s_toolchains" % (name, compiler)
     toolchains_repo(
-        name = name + "_" + compiler + "_toolchains",
+        name = toolchains_repo_name,
         compiler = compiler,
         user_repository_name = name,
     )
+
+    if register:
+        native.register_toolchains("@%s//:all" % toolchains_repo_name)
