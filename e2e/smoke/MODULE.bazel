@@ -1,17 +1,24 @@
-bazel_dep(name = "gzgz_rules_d", version = "0.0.0", dev_dependency = True)
-bazel_dep(name = "bazel_skylib", version = "1.3.0", dev_dependency = True)
+module(
+    name = "smoke",
+    compatibility_level = 0,
+    version = "0.0.0",
+)
+
+bazel_dep(name = "gzgz_rules_d", dev_dependency = True, version = "0.0.0")
+bazel_dep(name = "bazel_skylib", dev_dependency = True, version = "1.3.0")
 
 local_path_override(
     module_name = "gzgz_rules_d",
     path = "../..",
 )
 
-d = use_extension("@gzgz_rules_d//:extensions.bzl", "d")
+d = use_extension("@gzgz_rules_d//d:extensions.bzl", "d")
 
-d.d_toolchain(
+d.toolchain(
     compiler = "dmd",
-    version = "2.100.2",
+    version = "2.105.0",
 )
-use_repo(d, "d_dmd_toolchain")
+
+use_repo(d, "d_dmd_toolchains")
 
 register_toolchains("@d_dmd_toolchains//:all")

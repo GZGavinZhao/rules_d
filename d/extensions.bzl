@@ -56,7 +56,7 @@ def _toolchain_extension(module_ctx):
             registrations[compiler][name].append(toolchain.version)
 
     for compiler, regs in registrations.items():
-        for name, versions in regs.itmes():
+        for name, versions in regs.items():
             if len(versions) > 1:
                 selected = sorted(versions, reverse = True)[0]
 

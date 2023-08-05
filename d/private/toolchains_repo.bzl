@@ -87,15 +87,15 @@ toolchain(
     toolchain_type = "@gzgz_rules_d//d:toolchain_type",
 )
 """.format(
-           platform = platform,
-           name = repository_ctx.attr.name,
-           user_repository_name = repository_ctx.attr.user_repository_name,
-           compiler = compiler,
-           compatible_with = meta.compatible_with,
-       )
+            platform = platform,
+            name = repository_ctx.attr.name,
+            user_repository_name = repository_ctx.attr.user_repository_name,
+            compiler = compiler,
+            compatible_with = meta.compatible_with,
+        )
 
-   # Base BUILD file for this repository
-   repository_ctx.file("BUILD.bazel", build_content)
+    # Base BUILD file for this repository
+    repository_ctx.file("BUILD.bazel", build_content)
 
 toolchains_repo = repository_rule(
     _toolchains_repo_impl,
@@ -108,6 +108,6 @@ toolchains_repo = repository_rule(
         "compiler": attr.string(
             doc = "the type of compiler to use",
             values = COMPILERS,
-        )
+        ),
     },
 )

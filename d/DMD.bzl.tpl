@@ -1,4 +1,5 @@
 load("@gzgz_rules_d//d:toolchain.bzl", "d_toolchain")
+# load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -17,16 +18,22 @@ cc_import(
 
 filegroup(
     name = "phobos_src",
-    srcs = glob(["src/phobos/**/*.*"]),
+    srcs = glob(["src/phobos/**/*.d"]),
 )
 
 filegroup(
     name = "druntime_src",
     srcs = glob([
         "src/druntime/import/*.*",
-        "src/druntime/import/**/*.*",
+        "src/druntime/import/**/*.d",
     ]),
 )
+
+# native_binary(
+#     name = "dmd",
+#     out = "dmd_copy.exe",
+#     src = "linux/bin64/dmd",
+# )
 
 d_toolchain(
     name = "d_toolchain",
@@ -38,6 +45,10 @@ d_toolchain(
     druntime_src = "//:druntime_src",
     libphobos = "//:libphobos2",
     libphobos_src = "//:phobos_src",
-    version_flag = "-version",
     conf_file = "linux/bin64/dmd.conf",
+	flags = {
+        "version": "-version",
+        "header": "-Hf",
+		"output": "-of",
+	},
 )

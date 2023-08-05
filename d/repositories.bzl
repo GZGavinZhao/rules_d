@@ -47,7 +47,7 @@ def _d_repo_impl(repository_ctx):
 
     base_url = ""
     if compiler == "dmd":
-        base_url = "https://downloads.dlang.org/releases/2.x/dmd.{0}.{1}"
+        base_url = "https://downloads.dlang.org/releases/2.x/{0}/dmd.{0}.{1}"
     elif compiler == "ldc":
         base_url = "https://github.com/ldc-developers/ldc/releases/download/v{0}/ldc2-{0}-{1}"
 
@@ -57,14 +57,15 @@ def _d_repo_impl(repository_ctx):
     )
     repository_ctx.download_and_extract(
         url = url,
+        stripPrefix = "dmd2",
         # integrity = TOOL_VERSIONS[version][platform],
     )
 
     # Base BUILD file for this repository
     if compiler == "dmd":
-        repository_ctx.template("BUILD.bazel", "private/DMD.bzl.tpl")
+        repository_ctx.template("BUILD.bazel", Label("//d:DMD.bzl.tpl"))
     else:
-        repository_ctx.template("BUILD.bazel", "private/LDC.bzl.tpl")
+        repository_ctx.template("BUILD.bazel", Label("//d:LDC.bzl.tpl"))
 
 d_repositories = repository_rule(
     _d_repo_impl,
@@ -73,7 +74,7 @@ d_repositories = repository_rule(
 )
 
 # Wrapper macro around everything above, this is the primary API
-def d_register_toolchains(name, register = True, compiler, **kwargs):
+def d_register_toolchains(name, compiler, version, register = True, **kwargs):
     """Convenience macro for users which does typical setup.
 
     - create a repository for each built-in platform like "d_linux_amd64" -
@@ -95,6 +96,8 @@ def d_register_toolchains(name, register = True, compiler, **kwargs):
 
         d_repositories(
             name = name + "_" + compiler + "_" + platform,
+            compiler = compiler,
+            version = version,
             platform = platform,
             **kwargs
         )

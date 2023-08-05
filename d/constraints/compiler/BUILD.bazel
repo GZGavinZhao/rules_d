@@ -14,4 +14,3 @@ constraint_value(
     name = "ldc",
     constraint_setting = ":compiler",
 )
-
