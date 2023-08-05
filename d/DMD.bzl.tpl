@@ -45,7 +45,11 @@ d_toolchain(
     druntime_src = "//:druntime_src",
     libphobos = "//:libphobos2",
     libphobos_src = "//:phobos_src",
-    conf_file = "linux/bin64/dmd.conf",
+	conf_file = select({
+		"@bazel_tools//src/conditions:darwin": "osx/bin/dmd.conf",
+        "@bazel_tools//src/conditions:linux_x86_64": "linux/bin64/dmd.conf",
+        "@bazel_tools//src/conditions:windows_x64": "windows/bin64/dmd.conf",
+	}),
 	flags = {
         "version": "-version",
         "header": "-Hf",
