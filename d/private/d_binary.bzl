@@ -38,7 +38,7 @@ def _d_binary_impl(ctx):
         feature_configuration = feature_configuration,
         cc_toolchain = cc_toolchain,
         compilation_outputs = compilation_outputs,
-        user_link_flags = ctx.attr.linkopts,
+        user_link_flags = ctx.attr.linkopts + toolchain.linkopts,
         name = ctx.label.name,
         linking_contexts = common_linking_contexts + linking_contexts,
     )

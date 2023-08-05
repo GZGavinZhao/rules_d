@@ -42,6 +42,20 @@ d_toolchain(
         "@bazel_tools//src/conditions:linux_x86_64": "linux/bin64/dmd",
         "@bazel_tools//src/conditions:windows_x64": "windows/bin64/dmd.exe",
     }),
+    linkopts =  select({
+        "@bazel_tools//src/conditions:darwin": [
+            "-no_compact_unwind",
+            "-lpthread",
+            "-lm",
+        ],
+        "@bazel_tools//src/conditions:linux_x86_64": [
+            "-lpthread",
+            "-lm",
+            "-lrt",
+            "-ldl",
+        ],
+        "@bazel_tools//src/conditions:windows_x64": [],
+    }),
     druntime_src = "//:druntime_src",
     libphobos = "//:libphobos2",
     libphobos_src = "//:phobos_src",
