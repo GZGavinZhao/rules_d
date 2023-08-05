@@ -44,6 +44,7 @@ d_toolchain(
     }),
     linkopts =  select({
         "@bazel_tools//src/conditions:darwin": [
+            "-Xlinker",
             "-no_compact_unwind",
             "-lpthread",
             "-lm",
