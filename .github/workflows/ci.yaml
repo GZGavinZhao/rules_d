@@ -52,7 +52,7 @@ jobs:
       - name: Setup D compiler
         uses: dlang-community/setup-dlang@v1.3.0
         with:
-          compiler: dmd-1.105.0
+          compiler: dmd-2.105.0
       - name: Bruh
         run: |
           pushd e2e/smoke
