@@ -63,7 +63,7 @@ d_toolchain(
 	conf_file = select({
 		"@bazel_tools//src/conditions:darwin": "osx/bin/dmd.conf",
         "@bazel_tools//src/conditions:linux_x86_64": "linux/bin64/dmd.conf",
-        "@bazel_tools//src/conditions:windows_x64": "windows/bin64/dmd.conf",
+        "@bazel_tools//src/conditions:windows_x64": "windows/bin64/sc.ini",
 	}),
 	flags = {
         "version": "-version",
