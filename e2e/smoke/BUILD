@@ -3,30 +3,22 @@ Add a basic smoke-test target below.
 """
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("@gzgz_rules_d//d:defs.bzl", "d_binary", "d_library")
 
-d_library(
+build_test(
     name = "greeter",
-    srcs = glob(["source/greeter/*.d"]),
-    imports = ["source"],
-)
-
-d_library(
-    name = "hello",
-    srcs = glob(["source/hello/*.d"]),
-    imports = ["source"],
-    deps = [":greeter"],
-)
-
-d_binary(
-    name = "main",
-    srcs = glob(["app/*.d"]),
+    targets = [
+        "//source:greeter",
+    ],
 )
 
 build_test(
-    name = "smoke_test",
+    name = "hello",
     targets = [
-        ":greeter",
-        ":hello",
+        "//source:hello",
     ],
+)
+
+build_test(
+    name = "app",
+    targets = ["//app:app"],
 )

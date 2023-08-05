@@ -169,4 +169,3 @@ def preprocess_and_compile(ctx):
         objs.append(srco)
 
     return (srcis, objs, self_imports, versions)
-

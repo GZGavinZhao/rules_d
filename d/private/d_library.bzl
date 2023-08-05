@@ -3,7 +3,7 @@ load("@bazel_skylib//lib:structs.bzl", "structs")
 load("@rules_cc//cc:action_names.bzl", "CPP_LINK_STATIC_LIBRARY_ACTION_NAME")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("//d:toolchain.bzl", "D_TOOLCHAIN")
-load("//d/private:d_common.bzl", "DInfo", "preprocess_and_compile", "a_filetype")
+load("//d/private:d_common.bzl", "DInfo", "a_filetype", "preprocess_and_compile")
 
 def _d_library_impl(ctx):
     # D toolchain
