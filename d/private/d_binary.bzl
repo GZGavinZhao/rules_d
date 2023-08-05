@@ -20,6 +20,70 @@ def _d_binary_impl(ctx):
 
     (_, objs, _, _) = preprocess_and_compile(ctx)
 
+    # # Prepare variables for linking
+    # output = ctx.actions.declare_file(ctx.label.name)
+    # common_cc_infos = [toolchain.libphobos[CcInfo]]
+    # common_linker_inputs = [toolchain.libphobos[CcInfo].linking_context.linker_inputs]
+    # if not ctx.attr.better_c and toolchain.druntime:
+    #     common_cc_infos.append(toolchain.druntime[CcInfo])
+    #     common_linker_inputs.append(toolchain.druntime[CcInfo].linking_context.linker_inputs)
+
+    # linker_input = cc_common.create_linker_input(
+    #     owner = ctx.label,
+    #     libraries = depset([
+    #         cc_common.create_library_to_link(
+    #             actions = ctx.actions,
+    #             feature_configuration = feature_configuration,
+    #             cc_toolchain = cc_toolchain,
+    #             static_library = output,
+    #         ),
+    #     ]),
+    #     user_link_flags = ctx.attr.linkopts + toolchain.linkopts,
+    # )
+    # compilation_context = cc_common.create_compilation_context()
+    # linking_context = cc_common.create_linking_context(
+    #     linker_inputs = depset([linker_input], transitive = common_linker_inputs),
+    # )
+
+    # # Build linker flags
+    # linker_path = cc_common.get_tool_for_action(
+    #     feature_configuration = feature_configuration,
+    #     action_name = ACTION_NAMES.cpp_link_executable,
+    # )
+    # linker_variables = cc_common.create_link_variables(
+    #     feature_configuration = feature_configuration,
+    #     cc_toolchain = cc_toolchain,
+    #     output_file = output.path,
+    #     is_using_linker = True,
+    # )
+    # command_line = cc_common.get_memory_inefficient_command_line(
+    #     feature_configuration = feature_configuration,
+    #     action_name = ACTION_NAMES.cpp_link_executable,
+    #     variables = linker_variables,
+    # )
+    # link_args = ctx.actions.args()
+    # link_args.add_all(command_line)
+    # link_args.add_all(objs)
+
+    # # Link!
+    # env = cc_common.get_environment_variables(
+    #     feature_configuration = feature_configuration,
+    #     action_name = ACTION_NAMES.cpp_link_executable,
+    #     variables = linker_variables,
+    # )
+    # ctx.actions.run(
+    #     executable = linker_path,
+    #     arguments = [link_args],
+    #     env = env,
+    #     inputs = depset(
+    #         direct = objs,
+    #         transitive = [cc_toolchain.all_files],
+    #     ),
+    #     outputs = [output],
+    #     mnemonic = "DLink",
+    #     progress_message = "Linking D objects to executable %{output}",
+    # )
+
     # Prepare variables for linking
     common_linking_contexts = [toolchain.libphobos[CcInfo].linking_context]
     if not ctx.attr.better_c and toolchain.druntime:
@@ -27,7 +91,10 @@ def _d_binary_impl(ctx):
 
     # DMD has the -fPIC flag by default. LDC doesn't state it explicitly, but it
     # seems like they have it on too...?
-    compilation_outputs = cc_common.create_compilation_outputs(pic_objects = depset(objs))
+    compilation_outputs = cc_common.create_compilation_outputs(
+        objects = depset(objs),
+        pic_objects = depset(objs),
+    )
     linking_contexts = []
     for dep in ctx.attr.deps:
         linking_contexts.append(dep[CcInfo].linking_context)

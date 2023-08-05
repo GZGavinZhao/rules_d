@@ -23,19 +23,19 @@ def _build_import(label, im):
 
 def a_filetype(ctx):
     return ".a"
-    if ctx.target_platform_has_constraint("@platforms//os:windows"):
-        return ".lib"
-    else:
-        return ".a"
+    # if ctx.target_platform_has_constraint(Label("@platforms//os:windows")):
+    #     return ".lib"
+    # else:
+    #     return ".a"
 
 def so_filetype(ctx):
     return ".so"
-    if ctx.target_platform_has_constraint("@platforms//os:windows"):
-        return ".lib"
-    elif ctx.target_platform_has_constraint("@platforms//os:macos"):
-        return ".dylib"
-    else:
-        return ".so"
+    # if ctx.target_platform_has_constraint(Label("@platforms//os:windows")):
+    #     return ".lib"
+    # elif ctx.target_platform_has_constraint(Label("@platforms//os:macos")):
+    #     return ".dylib"
+    # else:
+    #     return ".so"
 
 def preprocess_and_compile(ctx):
     # D toolchain
