@@ -13,6 +13,7 @@ def _d_toolchain_impl(ctx):
         druntime = ctx.attr.druntime,
         druntime_src = ctx.attr.druntime_src,
         conf_file = ctx.attr.conf_file,
+        default_pic = ctx.attr.default_pic,
         flags = ctx.attr.flags,
     )
     return [toolchain_info]
@@ -32,6 +33,9 @@ d_toolchain = rule(
         "druntime_src": attr.label(),
         "conf_file": attr.label(
             allow_single_file = True,
+        ),
+        "default_pic": attr.bool(
+            mandatory = True,
         ),
         "flags": attr.string_dict(
             mandatory = True,

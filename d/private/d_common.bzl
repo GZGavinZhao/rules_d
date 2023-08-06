@@ -43,6 +43,7 @@ def preprocess_and_compile(ctx):
 
     # CC toolchain (for linking)
     cc_toolchain = find_cc_toolchain(ctx)
+    cc_toolchain_info = cc_common.CcToolchainInfo
     feature_configuration = cc_common.configure_features(
         ctx = ctx,
         cc_toolchain = cc_toolchain,
@@ -85,6 +86,16 @@ def preprocess_and_compile(ctx):
 
     # Build common compile flags
     common_args.add_all(imports, map_each = _map_imports)
+
+    # Whether we need -fPIC
+    # Weirdly, -fPIC is turned on by default only on DMD Linux.
+    # This affects linking since Bazel differentiates between `objects` and
+    # `pic_objects`. Exactly how this affects linking, I don't know. It seems
+    # that only on Linux, Bazel has PIC enabled by default.
+    pic = ctx.attr.pic or toolchain.default_pic or cc_toolchain_info.needs_pic_for_dynamic_libraries
+    if pic and not toolchain.default_pic:
+        common_args.add(toolchain.flags["pic"])
+    print("pic: %s" % pic)
 
     # DMD doesn't completely comply with posix, namely it only allows "-x=XXX"
     # but not "-x XXX", which is what Bazel's Arg helper formats to.
@@ -168,4 +179,4 @@ def preprocess_and_compile(ctx):
         )
         objs.append(srco)
 
-    return (srcis, objs, self_imports, versions)
+    return (srcis, objs, self_imports, versions, pic)

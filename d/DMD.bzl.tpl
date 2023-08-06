@@ -29,6 +29,8 @@ filegroup(
     ]),
 )
 
+# We purposefully don't use `native_binary` to avoid potential troubles on
+# Windows regarding runfiles.
 # native_binary(
 #     name = "dmd",
 #     out = "dmd_copy.exe",
@@ -64,6 +66,10 @@ d_toolchain(
 		"@bazel_tools//src/conditions:darwin": "osx/bin/dmd.conf",
         "@bazel_tools//src/conditions:linux_x86_64": "linux/bin64/dmd.conf",
         "@bazel_tools//src/conditions:windows_x64": "windows/bin64/sc.ini",
+	}),
+	default_pic = select({
+        "@bazel_tools//src/conditions:linux_x86_64": True,
+        "//conditions:default": False,
 	}),
 	flags = {
         "version": "-version",

@@ -18,7 +18,7 @@ def _d_library_impl(ctx):
         unsupported_features = ctx.disabled_features,
     )
 
-    (headers, objs, imports, versions) = preprocess_and_compile(ctx)
+    (headers, objs, imports, versions, _) = preprocess_and_compile(ctx)
 
     # Prepare variables for linking
     output_lib = ctx.actions.declare_file("lib" + ctx.label.name + a_filetype(ctx))
@@ -112,6 +112,7 @@ d_library = rule(
         "imports": attr.string_list(),
         "versions": attr.string_list(),
         "better_c": attr.bool(default = False),
+        "pic": attr.bool(default = False),
         "_cc_toolchain": attr.label(
             default = Label(
                 "@rules_cc//cc:current_cc_toolchain",
