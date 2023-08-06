@@ -31,9 +31,9 @@ def rules_d_dependencies():
     )
     http_archive(
         name = "rules_cc",
-        urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.5/rules_cc-0.0.5.tar.gz"],
-        sha256 = "2004c71f3e0a88080b2bd3b6d3b73b4c597116db9c9a36676d0ffad39b849214",
-        strip_prefix = "rules_cc-0.0.5",
+        urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.8/rules_cc-0.0.8.tar.gz"],
+        sha256 = "ae46b722a8b8e9b62170f83bfb040cbf12adb732144e689985a66b26410a7d6f",
+        strip_prefix = "rules_cc-0.0.8",
     )
     http_archive(
         name = "platforms",

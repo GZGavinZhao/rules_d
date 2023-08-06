@@ -95,6 +95,9 @@ def preprocess_and_compile(ctx):
     if pic and not toolchain.default_pic:
         common_args.add(toolchain.flags["pic"])
     print("pic: %s" % pic)
+    print("ctx.attr.pic: %s" % ctx.attr.pic)
+    print("toolchain.default_pic: %s" % toolchain.default_pic)
+    print("cc_toolchain.needs_pic_for_dynamic_libraries: %s" % cc_toolchain.needs_pic_for_dynamic_libraries)
 
     # DMD doesn't completely comply with posix, namely it only allows "-x=XXX"
     # but not "-x XXX", which is what Bazel's Arg helper formats to.

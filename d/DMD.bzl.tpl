@@ -44,7 +44,7 @@ d_toolchain(
         "@bazel_tools//src/conditions:linux_x86_64": "linux/bin64/dmd",
         "@bazel_tools//src/conditions:windows_x64": "windows/bin64/dmd.exe",
     }),
-    linkopts =  select({
+    linkopts = select({
         "@bazel_tools//src/conditions:darwin": [
             "-Xlinker",
             "-no_compact_unwind",
@@ -75,5 +75,6 @@ d_toolchain(
         "version": "-version",
         "header": "-Hf",
 		"output": "-of",
+        "pic": "-fPIC",
 	},
 )
