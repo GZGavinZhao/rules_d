@@ -49,6 +49,9 @@ def preprocess_and_compile(ctx):
         requested_features = ctx.features,
         unsupported_features = ctx.disabled_features,
     )
+    needs_pic_for_dynamic_libraries = cc_toolchain.needs_pic_for_dynamic_libraries(
+        feature_configuration = feature_configuration,
+    )
 
     common_args = ctx.actions.args()
 
@@ -91,13 +94,13 @@ def preprocess_and_compile(ctx):
     # This affects linking since Bazel differentiates between `objects` and
     # `pic_objects`. Exactly how this affects linking, I don't know. It seems
     # that only on Linux, Bazel has PIC enabled by default.
-    pic = ctx.attr.pic or toolchain.default_pic or cc_toolchain.needs_pic_for_dynamic_libraries
+    pic = ctx.attr.pic or toolchain.default_pic or needs_pic_for_dynamic_libraries
     if pic and not toolchain.default_pic:
         common_args.add(toolchain.flags["pic"])
     print("pic: %s" % pic)
     print("ctx.attr.pic: %s" % ctx.attr.pic)
     print("toolchain.default_pic: %s" % toolchain.default_pic)
-    print("cc_toolchain.needs_pic_for_dynamic_libraries: %s" % cc_toolchain.needs_pic_for_dynamic_libraries)
+    print("cc_toolchain.needs_pic_for_dynamic_libraries: %s" % needs_pic_for_dynamic_libraries)
 
     # DMD doesn't completely comply with posix, namely it only allows "-x=XXX"
     # but not "-x XXX", which is what Bazel's Arg helper formats to.
