@@ -17,3 +17,13 @@ bzl_library(
     srcs = ["resolved_toolchain.bzl"],
     visibility = ["//d:__subpackages__"],
 )
+
+bzl_library(
+    name = "d_rules",
+    srcs = [
+        "d_binary.bzl",
+        "d_common.bzl",
+        "d_library.bzl",
+    ],
+    visibility = ["//d:__subpackages__"],
+)
