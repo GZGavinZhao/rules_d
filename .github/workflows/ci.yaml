@@ -32,7 +32,7 @@ jobs:
           {"bazelversion": "5.4.0", "os": "windows-latest"},
         ]
   ldc:
-    runs-on: macos-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
           pushd e2e/smoke
           ldc2 -v app/main.d
   dmd:
-    runs-on: macos-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v3

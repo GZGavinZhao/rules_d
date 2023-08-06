@@ -29,6 +29,20 @@ def rules_d_dependencies():
             "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.3.0/bazel-skylib-1.3.0.tar.gz",
         ],
     )
+    http_archive(
+        name = "rules_cc",
+        urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.5/rules_cc-0.0.5.tar.gz"],
+        sha256 = "2004c71f3e0a88080b2bd3b6d3b73b4c597116db9c9a36676d0ffad39b849214",
+        strip_prefix = "rules_cc-0.0.5",
+    )
+    http_archive(
+        name = "platforms",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.5/platforms-0.0.5.tar.gz",
+            "https://github.com/bazelbuild/platforms/releases/download/0.0.5/platforms-0.0.5.tar.gz",
+        ],
+        sha256 = "379113459b0feaf6bfbb584a91874c065078aa673222846ac765f86661c27407",
+    )
 
 ########
 # Remaining content of the file is only used to support toolchains.
