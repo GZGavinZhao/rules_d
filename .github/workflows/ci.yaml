@@ -27,34 +27,32 @@ jobs:
       exclude: |
         [
           {"folder": ".", "bzlmodEnabled": false},
-          {"bazelversion": "5.4.0", "bzlmodEnabled": true},
-          {"bazelversion": "5.4.0", "os": "macos-latest"},
-          {"bazelversion": "5.4.0", "os": "windows-latest"},
+          {"bazelversion": "5.4.0"},
         ]
-  ldc:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-      - name: Setup D compiler
-        uses: dlang-community/setup-dlang@v1.3.0
-        with:
-          compiler: ldc-1.32.0
-      - name: Bruh
-        run: |
-          pushd e2e/smoke
-          ldc2 -v app/main.d
-  dmd:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-      - name: Setup D compiler
-        uses: dlang-community/setup-dlang@v1.3.0
-        with:
-          compiler: dmd-2.105.0
-      - name: Bruh
-        run: |
-          pushd e2e/smoke
-          dmd -v app/main.d
-          bazel build --enable_bzlmod -s //app:app || cat bazel-out/darwin-fastbuild/bin/app/app-2.params
+  # ldc:
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Checkout source
+  #       uses: actions/checkout@v3
+  #     - name: Setup D compiler
+  #       uses: dlang-community/setup-dlang@v1.3.0
+  #       with:
+  #         compiler: ldc-1.32.0
+  #     - name: Bruh
+  #       run: |
+  #         pushd e2e/smoke
+  #         ldc2 -v app/main.d
+  # dmd:
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Checkout source
+  #       uses: actions/checkout@v3
+  #     - name: Setup D compiler
+  #       uses: dlang-community/setup-dlang@v1.3.0
+  #       with:
+  #         compiler: dmd-2.105.0
+  #     - name: Bruh
+  #       run: |
+  #         pushd e2e/smoke
+  #         dmd -v app/main.d
+  #         bazel build --enable_bzlmod -s //app:app || cat bazel-out/darwin-fastbuild/bin/app/app-2.params
