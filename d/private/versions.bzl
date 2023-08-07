@@ -6,8 +6,8 @@ TODO: generate this file from GitHub API"""
 # shasum -b -a 384 [downloaded file] | awk '{ print $1 }' | xxd -r -p | base64
 DMD_VERSIONS = {
     "2.105.0": {
-        "x86_64-apple-darwin": "sha384-LOm86kwGAAbYpO7uYbWQIvFB9NDMCfIW3j05hDa+MWl7qCfB1MzNaHiLheLJW8+e",
-        "x86_64-pc-windows-msvc": "sha384-i0wnGJ6c0JXs6Qqc16Op4IJLy5UzBgWsfB1SiBN5AzR9KRxFPs+OfJ6WGBriy6Zg",
+        "x86_64-apple-darwin": "sha384-f4b79y0QL2VPyaRG9s9Bk3H7LxTt/7YC4nfj6S0pLksXvCejCfB1ZrBvml/SkH15",
+        "x86_64-pc-windows-msvc": "sha384-F9AeV6aG19oRyBBiA0gGW7TB8J3Jn2jXTgZcN5hJX3oDb5fzDEbffpbA7Q9M3wKG",
         "x86_64-unknown-linux-gnu": "sha384-4Utskg4Jhemhr+XfA5NiyvXEl14q6ak4XIEpxAmAiFWbWU/kFRr0KNiPL53+o3Si",
     },
 }
