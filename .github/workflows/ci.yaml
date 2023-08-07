@@ -62,5 +62,5 @@ jobs:
 
       - name: Run tests
         working-directory: e2e/smoke
-        run: bazel --bazelrc=${{ github.workspace }}/.github/workflows/ci.bazelrc --bazelrc=.bazelrc --extra_execution_platforms=@gzgz_rules_d//d/platforms:${{ matrix.compiler }} test //...
+        run: bazel --bazelrc=${{ github.workspace }}/.github/workflows/ci.bazelrc --bazelrc=.bazelrc test --extra_execution_platforms=@gzgz_rules_d//d/platforms:${{ matrix.compiler }} //...
 
