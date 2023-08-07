@@ -42,6 +42,7 @@ jobs:
         bzlmodEnabled: [true, false]
         compiler: [dmd, ldc]
 
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
