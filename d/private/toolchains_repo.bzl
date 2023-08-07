@@ -62,6 +62,20 @@ PLATFORM_TO_FILE = {
     },
 }
 
+PLATFORM_TO_NAME = {
+    "dmd": {
+        "x86_64-apple-darwin": "osx",
+        "x86_64-unknown-linux-gnu": "linux",
+        "x86_64-pc-windows-msvc": "windows",
+    },
+    "ldc": {
+        "x86_64-apple-darwin": "osx-x86_64",
+        "aarch64-apple-darwin": "osx-arm64",
+        "x86_64-unknown-linux-gnu": "linux-x86_64",
+        "x86_64-pc-windows-msvc": "windows-multilib",
+    },
+}
+
 def _toolchains_repo_impl(repository_ctx):
     compiler = repository_ctx.attr.compiler
 
@@ -91,7 +105,7 @@ toolchain(
             name = repository_ctx.attr.name,
             user_repository_name = repository_ctx.attr.user_repository_name,
             compiler = compiler,
-            compatible_with = meta.compatible_with,
+            compatible_with = meta.compatible_with + ["@gzgz_rules_d//d/constraints/compiler:%s" % compiler],
         )
 
     # Base BUILD file for this repository

@@ -13,10 +13,18 @@ local_path_override(
 )
 
 d = use_extension("@gzgz_rules_d//d:extensions.bzl", "d")
+
 d.toolchain(
     compiler = "dmd",
     version = "2.105.0",
 )
 use_repo(d, "d_dmd_toolchains")
 
+d.toolchain(
+    compiler = "ldc",
+    version = "1.30.0",
+)
+use_repo(d, "d_ldc_toolchains")
+
 register_toolchains("@d_dmd_toolchains//:all")
+register_toolchains("@d_ldc_toolchains//:all")

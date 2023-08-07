@@ -25,5 +25,12 @@ bzl_library(
         "d_common.bzl",
         "d_library.bzl",
     ],
+    deps = [
+        "@bazel_skylib//lib:paths",
+        "@bazel_skylib//lib:structs",
+        "@rules_cc//cc:action_names.bzl",
+        "@rules_cc//cc:find_cc_toolchain.bzl",
+        "//d:toolchain",
+    ],
     visibility = ["//d:__subpackages__"],
 )

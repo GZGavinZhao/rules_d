@@ -3,7 +3,7 @@ package(default_visibility = ["//visibility:public"])
 platform(
     name = "dmd",
     constraint_values = [
-        "@//d/constraints/compiler:dmd",
+        "//d/constraints/compiler:dmd",
     ],
     parents = ["@local_config_platform//:host"],
 )
@@ -11,7 +11,7 @@ platform(
 platform(
     name = "ldc",
     constraint_values = [
-        "@//d/constraints/compiler:ldc",
+        "//d/constraints/compiler:ldc",
     ],
     parents = ["@local_config_platform//:host"],
 )

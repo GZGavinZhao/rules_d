@@ -6,8 +6,8 @@ See https://docs.bazel.build/versions/main/skylark/deploying.html#dependencies
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", _http_archive = "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
-load("//d/private:toolchains_repo.bzl", "COMPILERS", "PLATFORMS", "PLATFORM_TO_FILE", "toolchains_repo")
-load("//d/private:versions.bzl", "TOOL_VERSIONS")
+load("//d/private:toolchains_repo.bzl", "COMPILERS", "PLATFORMS", "PLATFORM_TO_FILE",  "PLATFORM_TO_NAME", "toolchains_repo")
+load("//d/private:versions.bzl", "DMD_VERSIONS", "LDC_VERSIONS")
 
 def http_archive(name, **kwargs):
     maybe(_http_archive, name = name, **kwargs)
@@ -54,16 +54,23 @@ _ATTRS = {
     "compiler": attr.string(mandatory = True, values = COMPILERS),
 }
 
+def _strip_prefix(compiler, version, platform):
+    if compiler == "dmd":
+        return "dmd2"
+    else:
+        return "ldc2-%s-%s" % (version, PLATFORM_TO_NAME[compiler][platform])
+
 def _d_repo_impl(repository_ctx):
     compiler = repository_ctx.attr.compiler
     version = repository_ctx.attr.version
     platform = repository_ctx.attr.platform
 
-    base_url = ""
     if compiler == "dmd":
         base_url = "https://downloads.dlang.org/releases/2.x/{0}/dmd.{0}.{1}"
+        checksums = DMD_VERSIONS
     elif compiler == "ldc":
         base_url = "https://github.com/ldc-developers/ldc/releases/download/v{0}/ldc2-{0}-{1}"
+        checksums = LDC_VERSIONS
 
     url = base_url.format(
         version,
@@ -71,8 +78,8 @@ def _d_repo_impl(repository_ctx):
     )
     repository_ctx.download_and_extract(
         url = url,
-        stripPrefix = "dmd2",
-        # integrity = TOOL_VERSIONS[version][platform],
+        stripPrefix = _strip_prefix(compiler, version, platform),
+        integrity = checksums[version][platform],
     )
 
     # Base BUILD file for this repository

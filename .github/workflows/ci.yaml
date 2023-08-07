@@ -16,43 +16,50 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
   test:
-    uses: bazel-contrib/.github/.github/workflows/bazel.yaml@v3
-    with:
-      folders: |
-        [
-          ".",
-          "e2e/smoke"
-        ]
-      exclude: |
-        [
-          {"folder": ".", "bzlmodEnabled": false},
-          {"bazelversion": "5.4.0"},
-        ]
-  # ldc:
-  #   runs-on: windows-latest
-  #   steps:
-  #     - name: Checkout source
-  #       uses: actions/checkout@v3
-  #     - name: Setup D compiler
-  #       uses: dlang-community/setup-dlang@v1.3.0
-  #       with:
-  #         compiler: ldc-1.32.0
-  #     - name: Bruh
-  #       run: |
-  #         pushd e2e/smoke
-  #         ldc2 -v app/main.d
-  # dmd:
-  #   runs-on: windows-latest
-  #   steps:
-  #     - name: Checkout source
-  #       uses: actions/checkout@v3
-  #     - name: Setup D compiler
-  #       uses: dlang-community/setup-dlang@v1.3.0
-  #       with:
-  #         compiler: dmd-2.105.0
-  #     - name: Bruh
-  #       run: |
-  #         pushd e2e/smoke
-  #         dmd -v app/main.d
-  #         bazel build --enable_bzlmod -s //app:app || cat bazel-out/darwin-fastbuild/bin/app/app-2.params
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        users: actions/checkout@v3
+
+      - name: Mount bazel caches
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+          key: bazel-cache-${{ hashFiles('**/BUILD.bazel', '**/*.bzl', 'WORKSPACE') }}
+          restore-keys: bazel-cache-
+
+      - name: Run tests
+        run: bazel test //...
+
+  e2e:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        bzlmodEnabled: [true, false]
+        compiler: [dmd, ldc]
+
+    steps:
+      - name: Checkout source
+        users: actions/checkout@v3
+
+      - name: Mount bazel caches
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+          key: bazel-cache-${{ hashFiles('**/BUILD.bazel', '**/*.bzl', 'WORKSPACE') }}
+          restore-keys: bazel-cache-
+
+      - name: Set bzlmod flag
+        if: matrix.bzlmodEnabled
+        working-directory: e2e/smoke
+        run: echo "bzlmod_flag=--enable_bzlmod" >> .bazelrc
+
+      - name: Run tests
+        working-directory: e2e/smoke
+        run: bazel --bazelrc=${{ github.workspace }}/.github/workflows/ci.bazelrc --bazelrc=.bazelrc --extra_execution_platforms=@gzgz_rules_d//d/platforms:${{ matrix.compiler }} test //...
+
