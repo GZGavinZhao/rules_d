@@ -7,6 +7,7 @@ def _d_toolchain_impl(ctx):
     toolchain_info = platform_common.ToolchainInfo(
         name = ctx.label.name,
         compiler = ctx.attr.compiler,
+        dopts = ctx.attr.dopts,
         linkopts = ctx.attr.linkopts,
         libphobos = ctx.attr.libphobos,
         libphobos_src = ctx.attr.libphobos_src,
@@ -26,7 +27,12 @@ d_toolchain = rule(
             allow_single_file = True,
             cfg = "exec",
         ),
-        "linkopts": attr.string_list(),
+        "dopts": attr.string_list(
+            default = [],
+        ),
+        "linkopts": attr.string_list(
+            default = [],
+        ),
         "libphobos": attr.label(),
         "libphobos_src": attr.label(),
         "druntime": attr.label(),

@@ -44,6 +44,10 @@ d_toolchain(
         "@bazel_tools//src/conditions:linux_x86_64": "linux/bin64/dmd",
         "@bazel_tools//src/conditions:windows_x64": "windows/bin64/dmd.exe",
     }),
+    dopts = select({
+        "@bazel_tools//src/conditions:windows_x64": ["-mscrtlib="],
+        "//conditions:default": [],
+    }),
     linkopts = select({
         "@bazel_tools//src/conditions:darwin": [
             "-Xlinker",
@@ -57,7 +61,9 @@ d_toolchain(
             "-lrt",
             "-ldl",
         ],
-        "@bazel_tools//src/conditions:windows_x64": [],
+        "@bazel_tools//src/conditions:windows_x64": [
+            "legacy_stdio_definitions.lib",
+        ],
     }),
     druntime_src = "//:druntime_src",
     libphobos = "//:libphobos2",

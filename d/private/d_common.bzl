@@ -114,6 +114,8 @@ def preprocess_and_compile(ctx):
     if toolchain.conf_file:
         common_args.add("-conf=" + toolchain.conf_file.files.to_list()[0].path)
 
+    # Toolchain-specific default flags
+    common_args.add_all(toolchain.dopts)
     # User-supplied flags to passed to the compiler
     common_args.add_all(ctx.attr.dopts)
 
