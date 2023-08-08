@@ -7,9 +7,9 @@ local_repository(
 #---SNIP--- Below here is re-used in the workspace snippet published on releases
 
 ######################
-# rules_d setup #
+# gzgz_rules_d setup #
 ######################
-# Fetches the rules_d dependencies.
+# Fetches the gzgz_rules_d dependencies.
 # If you want to have a different version of some dependency,
 # you should fetch it *before* calling this.
 # Alternatively, you can skip calling this function, so long as you've
@@ -24,8 +24,8 @@ d_register_toolchains(
     version = "2.105.0",
 )
 
-
 d_register_toolchains(
+    # buildifier: disable=duplicated-name
     name = "d",
     compiler = "ldc",
     version = "1.30.0",

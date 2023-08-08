@@ -31,7 +31,7 @@ http_archive(
     name = "gzgz_rules_d",
     sha256 = "${SHA}",
     strip_prefix = "${PREFIX}",
-    url = "https://github.com/GZGavinZhao/rules_d/releases/download/${TAG}/${ARCHIVE}",
+    url = "https://github.com/GZGavinZhao/gzgz_rules_d/releases/download/${TAG}/${ARCHIVE}",
 )
 EOF
 

@@ -17,6 +17,6 @@ LDC_VERSIONS = {
         "x86_64-apple-darwin": "sha384-7pnStRevAiPmpZP8HWGxeYZ6Tz+jT5XDIIyq6FbU2AdNTLaEp29vQCs7eVvkOJS6",
         "aarch64-apple-darwin": "sha384-ws5UW5kYCFkSPk2f+c/tvugeR8FRu6oLUMqri1cdYSxbsVggzLxebdNb53ubRurY",
         "x86_64-pc-windows-msvc": "sha384-hwhxWhOjCvSVwgTGaqWVPvrwyBC75TOOQAB4plz7+SxpoiWwOQZ+JzXkimLC8pVX",
-        "x86_64-unknown-linux-gnu": "sha384-cpbmUuQekrwm3NghjuS0WH5H54r/Yscd9sEOQOIbBSL9dAGQzTeAvEJkwR5sxm85",
+        "x86_64-unknown-linux-gnu": "sha384-JFO8NR4kVMNZnYu6Hvgdo8BEXNZmpDSxbZFc6Aw2cIQKPb7QIrdb4a/i0MRtlSEy",
     }
 }
