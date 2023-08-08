@@ -58,7 +58,7 @@ PLATFORM_TO_FILE = {
         "x86_64-apple-darwin": "osx-x86_64.tar.xz",
         "aarch64-apple-darwin": "osx-arm64.tar.xz",
         "x86_64-unknown-linux-gnu": "linux-x86_64.tar.xz",
-        "x86_64-pc-windows-msvc": "windows-multilib.7z",
+        "x86_64-pc-windows-msvc": "windows-x64.7z",
     },
 }
 
@@ -72,7 +72,7 @@ PLATFORM_TO_NAME = {
         "x86_64-apple-darwin": "osx-x86_64",
         "aarch64-apple-darwin": "osx-arm64",
         "x86_64-unknown-linux-gnu": "linux-x86_64",
-        "x86_64-pc-windows-msvc": "windows-multilib",
+        "x86_64-pc-windows-msvc": "windows-x64",
     },
 }
 
