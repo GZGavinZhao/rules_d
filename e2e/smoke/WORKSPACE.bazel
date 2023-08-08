@@ -23,3 +23,10 @@ d_register_toolchains(
     compiler = "dmd",
     version = "2.105.0",
 )
+
+
+d_register_toolchains(
+    name = "d",
+    compiler = "ldc",
+    version = "1.30.0",
+)

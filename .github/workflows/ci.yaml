@@ -58,7 +58,7 @@ jobs:
       - name: Set bzlmod flag
         if: matrix.bzlmodEnabled
         working-directory: e2e/smoke
-        run: echo "bzlmod_flag=--enable_bzlmod" >> .bazelrc
+        run: echo "common --enable_bzlmod" >> .bazelrc
 
       - name: Run tests
         working-directory: e2e/smoke
