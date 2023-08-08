@@ -7,7 +7,7 @@ TODO: generate this file from GitHub API"""
 DMD_VERSIONS = {
     "2.105.0": {
         "x86_64-apple-darwin": "sha384-f4b79y0QL2VPyaRG9s9Bk3H7LxTt/7YC4nfj6S0pLksXvCejCfB1ZrBvml/SkH15",
-        "x86_64-pc-windows-msvc": "sha384-mC0kjHMgU4bm/WuHmHWdcezucvFKAGUwEA7X4QyPV/yKcJsBoBgta1Or0E2swA1y",
+        "x86_64-pc-windows-msvc": "sha384-F9AeV6aG19oRyBBiA0gGW7TB8J3Jn2jXTgZcN5hJX3oDb5fzDEbffpbA7Q9M3wKG",
         "x86_64-unknown-linux-gnu": "sha384-4Utskg4Jhemhr+XfA5NiyvXEl14q6ak4XIEpxAmAiFWbWU/kFRr0KNiPL53+o3Si",
     },
 }
