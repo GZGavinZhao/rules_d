@@ -2,7 +2,7 @@ package(default_visibility = ["//visibility:public"])
 
 constraint_setting(
     name = "compiler",
-    default_constraint_value = ":dmd",
+    # default_constraint_value = ":dmd",
 )
 
 constraint_value(
