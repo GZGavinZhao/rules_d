@@ -41,6 +41,10 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         bzlmodEnabled: [true, false]
         compiler: [dmd, ldc]
+        # Bazel doesn't support extracting 7z archives...
+        exclude:
+          - os: windows-latest
+          - compiler: ldc
 
     runs-on: ${{ matrix.os }}
     steps:

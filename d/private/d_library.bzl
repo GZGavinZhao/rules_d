@@ -3,7 +3,7 @@ load("@bazel_skylib//lib:structs.bzl", "structs")
 load("@rules_cc//cc:action_names.bzl", "CPP_LINK_STATIC_LIBRARY_ACTION_NAME")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("//d:toolchain.bzl", "D_TOOLCHAIN")
-load("//d/private:d_common.bzl", "DInfo", "a_filetype", "preprocess_and_compile")
+load("//d/private:d_common.bzl", "COMMON_ATTRS", "DInfo", "a_filetype", "preprocess_and_compile")
 
 def _d_library_impl(ctx):
     # D toolchain
@@ -98,27 +98,7 @@ def _d_library_impl(ctx):
 
 d_library = rule(
     implementation = _d_library_impl,
-    attrs = {
-        "srcs": attr.label_list(
-            allow_empty = False,
-            allow_files = [".d", ".di"],
-        ),
-        "deps": attr.label_list(
-            providers = [CcInfo, DInfo],
-        ),
-        "data": attr.label_list(),
-        "dopts": attr.string_list(),
-        "linkopts": attr.string_list(),
-        "imports": attr.string_list(),
-        "versions": attr.string_list(),
-        "better_c": attr.bool(default = False),
-        "pic": attr.bool(default = False),
-        "_cc_toolchain": attr.label(
-            default = Label(
-                "@rules_cc//cc:current_cc_toolchain",
-            ),
-        ),
-    },
+    attrs = COMMON_ATTRS,
     provides = [DInfo, CcInfo],
     fragments = ["cpp"],
     toolchains = [D_TOOLCHAIN] + use_cc_toolchain(),

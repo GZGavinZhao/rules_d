@@ -13,6 +13,30 @@ DInfo = provider(
     },
 )
 
+COMMON_ATTRS = {
+    "srcs": attr.label_list(
+        allow_empty = False,
+        allow_files = [".d", ".di"],
+    ),
+    "deps": attr.label_list(
+        providers = [CcInfo, DInfo],
+    ),
+    "data": attr.label_list(),
+    "dopts": attr.string_list(),
+    "linkopts": attr.string_list(),
+    "imports": attr.string_list(),
+    "versions": attr.string_list(),
+    "better_c": attr.bool(default = False),
+    "pic": attr.bool(default = False),
+    "_cc_toolchain": attr.label(
+        default = Label(
+            "@rules_cc//cc:current_cc_toolchain",
+        ),
+    ),
+    '_windows_constraint': attr.label(default = '@platforms//os:windows'),
+    '_macos_constraint': attr.label(default = '@platforms//os:macos'),
+}
+
 def _map_imports(content):
     # toolchain = ctx.toolchains[D_TOOLCHAIN]
     return "-I%s" % content
@@ -22,20 +46,31 @@ def _build_import(label, im):
     return paths.join(label.workspace_root, label.package, im)
 
 def a_filetype(ctx):
-    return ".a"
-    # if ctx.target_platform_has_constraint(Label("@platforms//os:windows")):
-    #     return ".lib"
-    # else:
-    #     return ".a"
+    windows_constraint = ctx.attr._windows_constraint[platform_common.ConstraintValueInfo]
+
+    if ctx.target_platform_has_constraint(windows_constraint):
+        return ".lib"
+    else:
+        return ".a"
 
 def so_filetype(ctx):
-    return ".so"
-    # if ctx.target_platform_has_constraint(Label("@platforms//os:windows")):
-    #     return ".lib"
-    # elif ctx.target_platform_has_constraint(Label("@platforms//os:macos")):
-    #     return ".dylib"
-    # else:
-    #     return ".so"
+    windows_constraint = ctx.attr._windows_constraint[platform_common.ConstraintValueInfo]
+    macos_constraint = ctx.attr._macos_constraint[platform_common.ConstraintValueInfo]
+
+    if ctx.target_platform_has_constraint(windows_constraint):
+        return ".lib"
+    elif ctx.target_platform_has_constraint(macos_constraint):
+        return ".dylib"
+    else:
+        return ".so"
+
+def exe_filetype(ctx):
+    windows_constraint = ctx.attr._windows_constraint[platform_common.ConstraintValueInfo]
+
+    if ctx.target_platform_has_constraint(windows_constraint):
+        return ".exe"
+    else:
+        return ""
 
 def preprocess_and_compile(ctx):
     # D toolchain
@@ -129,7 +164,8 @@ def preprocess_and_compile(ctx):
         base_files.append(toolchain.conf_file.files)
 
     # Files from thet target itself that are needed by every compilation
-    self_files = [depset(ctx.files.srcs), depset(ctx.files.data)]
+    data_depset = depset(ctx.files.data)
+    srcs_depset = depset(ctx.files.srcs)
 
     # Every src's corresponding interface (.di) files
     srcis = []
@@ -152,7 +188,7 @@ def preprocess_and_compile(ctx):
 
         ctx.actions.run(
             outputs = [srci],
-            inputs = depset([src], transitive = headers + self_files + base_files),
+            inputs = depset([src], transitive = [srcs_depset, data_depset] + headers + base_files),
             arguments = [common_args, iargs],
             executable = toolchain.compiler.files_to_run,
             mnemonic = "DInterface",
@@ -161,7 +197,7 @@ def preprocess_and_compile(ctx):
         srcis.append(srci)
 
     # Add the interface files. May reduce compilation times.
-    self_files.append(depset(srcis))
+    srcis_depset = depset(srcis)
 
     # Every src's corresponding object (.o) files
     objs = []
@@ -174,11 +210,10 @@ def preprocess_and_compile(ctx):
         oargs.add("%s=%s" % (toolchain.flags["output"], srco.path))
         oargs.add("-c")
         oargs.add(src)
-        oargs.add("-main")
 
         ctx.actions.run(
             outputs = [srco],
-            inputs = depset([src], transitive = headers + self_files + base_files),
+            inputs = depset([src], transitive = [srcis_depset, data_depset] + headers + base_files),
             arguments = [common_args, oargs],
             executable = toolchain.compiler.files_to_run,
             mnemonic = "DCompile",
