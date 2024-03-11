@@ -1,5 +1,6 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:structs.bzl", "structs")
+load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 load("@rules_cc//cc:action_names.bzl", "CPP_LINK_STATIC_LIBRARY_ACTION_NAME")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("//d:toolchain.bzl", "D_TOOLCHAIN")
@@ -28,6 +29,9 @@ COMMON_ATTRS = {
     "versions": attr.string_list(),
     "better_c": attr.bool(default = False),
     "pic": attr.bool(default = False),
+    "_use_interface": attr.label(
+        default = Label("//d:use_interface")
+    ),
     "_cc_toolchain": attr.label(
         default = Label(
             "@rules_cc//cc:current_cc_toolchain",
@@ -94,11 +98,13 @@ def preprocess_and_compile(ctx):
     versions = []
     versions.extend(ctx.attr.versions)
 
+    use_interface = ctx.attr._use_interface[BuildSettingInfo].value
+
     # This is similar to include paths in C/C++
     imports = []
     self_imports = []
     for im in ctx.attr.imports:
-        # For generated files (interface files)
+        # For generated files (e.g. interface files)
         self_imports.append(paths.join(ctx.bin_dir.path, ctx.label.package, im))
 
         # For already existing source files, in case interface files aren't
@@ -169,35 +175,37 @@ def preprocess_and_compile(ctx):
 
     # Every src's corresponding interface (.di) files
     srcis = []
-    for src in ctx.files.srcs:
-        if src.extension == "di":
-            # fail(".di files are NOT accepted as srcs to d_binary. Consider adding them to hdrs.")
-            srcis.append(src)
-            continue
-        elif src.extension != "d":
-            fail("Only .d or .di files are accepted as srcs to d_binary, but got %s!" % src.short_path)
+    if use_interface:
+        for src in ctx.files.srcs:
+            if src.extension == "di":
+                # fail(".di files are NOT accepted as srcs to d_binary. Consider adding them to hdrs.")
+                srcis.append(src)
+                continue
+            elif src.extension != "d":
+                fail("Only .d or .di files are accepted as srcs to d_binary, but got %s!" % src.short_path)
 
-        srci = ctx.actions.declare_file(
-            paths.replace_extension(src.basename, ".di"),
-            sibling = src,
-        )
-        iargs = ctx.actions.args()
-        iargs.add(src)
-        iargs.add("-o-")
-        iargs.add("%s=%s" % (toolchain.flags["header"], srci.path))
+            srci = ctx.actions.declare_file(
+                paths.replace_extension(src.basename, ".di"),
+                sibling = src,
+            )
+            iargs = ctx.actions.args()
+            iargs.add(src)
+            iargs.add("-o-")
+            iargs.add("%s=%s" % (toolchain.flags["header"], srci.path))
 
-        ctx.actions.run(
-            outputs = [srci],
-            inputs = depset([src], transitive = [srcs_depset, data_depset] + headers + base_files),
-            arguments = [common_args, iargs],
-            executable = toolchain.compiler.files_to_run,
-            mnemonic = "DInterface",
-            progress_message = "Generating interface file for %s" % src.short_path,
-        )
-        srcis.append(srci)
+            ctx.actions.run(
+                outputs = [srci],
+                inputs = depset([src], transitive = [srcs_depset, data_depset] + headers + base_files),
+                arguments = [common_args, iargs],
+                executable = toolchain.compiler.files_to_run,
+                mnemonic = "DInterface",
+                progress_message = "Generating interface file for %s" % src.short_path,
+            )
+            srcis.append(srci)
 
-    # Add the interface files. May reduce compilation times.
-    srcis_depset = depset(srcis)
+    # Either the interface files, or the source files depending on the flag
+    # @gzgz_rules_d//d:use_interface
+    srcis_depset = depset(srcis) if use_interface else depset(ctx.files.srcs)
 
     # Every src's corresponding object (.o) files
     objs = []
